@@ -8,7 +8,9 @@ namespace TwoBottles
     {
         static void Main(string[] args)
         {
-            // Pour from bottle to bottle to measure specific amount of water
+            // Problem:
+            // Pour from bottles of two different sizes in order
+            // to measure specific amount of water
             // Bottles are 3 and 5 litres, 
             // measure shortest way to measure x litre(s).
             // Two possible directions for pouring -->
@@ -18,46 +20,42 @@ namespace TwoBottles
 
             int smallBottle = 3;
             int bigBottle = 5;
-            Console.WriteLine("Hur många liter (0-5) vill du mäta upp?");
+            Console.WriteLine("Hur många liter (0-5) vill du mäta upp?" + System.Environment.NewLine + "Avsluta med '-1'");
             int soughtLitres = 0;
-            try
+            soughtLitres = Int32.Parse(Console.ReadLine());
+            while (soughtLitres != -1)
             {
+                while (soughtLitres < 0 || soughtLitres > 5)
+                {
+                    if (soughtLitres < 0)
+                    {
+                        Console.WriteLine("Du kan ej ange ett negativt tal.");
+                    }
+                    if (soughtLitres > 5)
+                    {
+                        Console.WriteLine("Du kan ej ange ett tal som är större än 5.");
+                    }
+                    try
+                    {
+                        soughtLitres = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Environment.Exit(160);
+                    }
+                }
+
+                // Pour from both directions
+                // Return smallest value
+                var fromSmallToBigBottleMoves = Pour(smallBottle, bigBottle, soughtLitres);
+                var fromBigToSmallBottleMoves = Pour(bigBottle, smallBottle, soughtLitres);
+
+                Console.WriteLine("Kortaste antal steg: " + ShortestMoves(new List<int>() { fromSmallToBigBottleMoves, fromBigToSmallBottleMoves }));
+                Console.WriteLine();
+                Console.WriteLine("Prova gärna igen:");
                 soughtLitres = Int32.Parse(Console.ReadLine());
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Environment.Exit(160);
-            }
-            while (soughtLitres < 0 || soughtLitres > 5)
-            {
-                if (soughtLitres < 0)
-                {
-                    Console.WriteLine("Du kan ej ange ett negativt tal.");
-                }
-                if (soughtLitres > 5)
-                {
-                    Console.WriteLine("Du kan ej ange ett tal som är större än 5.");
-                }
-                try
-                {
-                    soughtLitres = Convert.ToInt32(Console.ReadLine());
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    Environment.Exit(160);
-                }
-                
-            }
-
-            // Pour from both directions
-            // Return smallest value
-            var fromSmallToBigBottleMoves = Pour(smallBottle, bigBottle, soughtLitres);
-            //var leftMoves = PourLeft(smallBottle, bigBottle, soughtLitres);
-            var fromBigToSmallBottleMoves = Pour(bigBottle, smallBottle, soughtLitres);
-
-            Console.WriteLine("Kortaste antal steg: " + ShortestMoves(fromSmallToBigBottleMoves, fromBigToSmallBottleMoves));
         }
 
         public static int Pour(int startBottle, int destinationBottle, int soughtLitres)
@@ -65,7 +63,6 @@ namespace TwoBottles
             var moves = 0;
             var waterInBottle1 = 0;
             var waterInBottle2 = 0;
-            Console.WriteLine();
             Console.WriteLine("Häll från " + startBottle + "-litersflaskan till " + destinationBottle + "-litersflaskan:");
 
             // Loop as long as we have no solution
@@ -115,14 +112,19 @@ namespace TwoBottles
                     }
                 }
             }
-            Console.WriteLine("----------");
+            Console.WriteLine("-------------");
             return moves;
         }
 
-        public static int ShortestMoves(int rightMoves, int leftMoves)
+        /// <summary>
+        /// Return minimum amount of moves
+        /// </summary>
+        /// <param name="rightMoves"></param>
+        /// <param name="leftMoves"></param>
+        /// <returns></returns>
+        public static int ShortestMoves(List<int> movesList)
         {
-            var moves = new List<int>() { rightMoves, leftMoves };
-            return moves.Min();
+            return movesList.Min();
         }
     }
 }

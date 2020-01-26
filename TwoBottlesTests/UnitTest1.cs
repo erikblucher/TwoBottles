@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using Assert = NUnit.Framework.Assert;
 
 namespace TwoBottlesTests
@@ -37,7 +38,7 @@ namespace TwoBottlesTests
         [DataRow(5, 2, 2)]
         public void TestShortestMoves(int firstNumber, int secondNumber, int smallestNumber)
         {
-            Assert.AreEqual(smallestNumber, TwoBottles.Program.ShortestMoves(firstNumber, secondNumber));
+            Assert.AreEqual(smallestNumber, TwoBottles.Program.ShortestMoves(new List<int>() { firstNumber, secondNumber }));
         }
 
         [TestMethod]
@@ -50,7 +51,7 @@ namespace TwoBottlesTests
         {
             var shortestWayToSoughtLitresPourFromSmallToBig = TwoBottles.Program.Pour(smallBottle, bigBottle, soughtLitres);
             var shortestWayToSoughtLitresPourFromBigToSmall = TwoBottles.Program.Pour(bigBottle, smallBottle, soughtLitres);
-            var shortestWayToSoughtLitres = TwoBottles.Program.ShortestMoves(shortestWayToSoughtLitresPourFromSmallToBig, shortestWayToSoughtLitresPourFromBigToSmall);
+            var shortestWayToSoughtLitres = TwoBottles.Program.ShortestMoves(new List<int>() { shortestWayToSoughtLitresPourFromSmallToBig, shortestWayToSoughtLitresPourFromBigToSmall });
 
             Assert.AreEqual(shortestWay, shortestWayToSoughtLitres);
         }
