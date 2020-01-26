@@ -1,0 +1,11 @@
+C:\Users\erikb\OneDrive\Desktop\Jobb\Beamon People\Koduppgift\TwoBottles\bin\Debug\netcoreapp3.1\TwoBottles.exe
+C:\Users\erikb\OneDrive\Desktop\Jobb\Beamon People\Koduppgift\TwoBottles\bin\Debug\netcoreapp3.1\TwoBottles.deps.json
+C:\Users\erikb\OneDrive\Desktop\Jobb\Beamon People\Koduppgift\TwoBottles\bin\Debug\netcoreapp3.1\TwoBottles.runtimeconfig.json
+C:\Users\erikb\OneDrive\Desktop\Jobb\Beamon People\Koduppgift\TwoBottles\bin\Debug\netcoreapp3.1\TwoBottles.runtimeconfig.dev.json
+C:\Users\erikb\OneDrive\Desktop\Jobb\Beamon People\Koduppgift\TwoBottles\bin\Debug\netcoreapp3.1\TwoBottles.dll
+C:\Users\erikb\OneDrive\Desktop\Jobb\Beamon People\Koduppgift\TwoBottles\bin\Debug\netcoreapp3.1\TwoBottles.pdb
+C:\Users\erikb\OneDrive\Desktop\Jobb\Beamon People\Koduppgift\TwoBottles\obj\Debug\netcoreapp3.1\TwoBottles.AssemblyInfoInputs.cache
+C:\Users\erikb\OneDrive\Desktop\Jobb\Beamon People\Koduppgift\TwoBottles\obj\Debug\netcoreapp3.1\TwoBottles.AssemblyInfo.cs
+C:\Users\erikb\OneDrive\Desktop\Jobb\Beamon People\Koduppgift\TwoBottles\obj\Debug\netcoreapp3.1\TwoBottles.dll
+C:\Users\erikb\OneDrive\Desktop\Jobb\Beamon People\Koduppgift\TwoBottles\obj\Debug\netcoreapp3.1\TwoBottles.pdb
+C:\Users\erikb\OneDrive\Desktop\Jobb\Beamon People\Koduppgift\TwoBottles\obj\Debug\netcoreapp3.1\TwoBottles.csprojAssemblyReference.cache
