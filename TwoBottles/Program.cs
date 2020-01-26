@@ -117,10 +117,9 @@ namespace TwoBottles
         }
 
         /// <summary>
-        /// Return minimum amount of moves
+        /// Return minimum amount of moves from a list of moves
         /// </summary>
-        /// <param name="rightMoves"></param>
-        /// <param name="leftMoves"></param>
+        /// <param name="movesList"></param>
         /// <returns></returns>
         public static int ShortestMoves(List<int> movesList)
         {
