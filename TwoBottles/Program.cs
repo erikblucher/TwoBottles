@@ -17,24 +17,16 @@ namespace TwoBottles
             // 1) To small bottle
             // 2) To big bottle
             // Stop when any bottle contains the sought amount of water
-
-            int smallBottle = 3;
-            int bigBottle = 5;
-            Console.WriteLine("Hur många liter (0-5) vill du mäta upp?" + System.Environment.NewLine + "Avsluta med '-1'");
-            int soughtLitres = 0;
+            var smallBottle = 3;
+            var bigBottle = 5;
+            Console.WriteLine("Hur många liter vill du mäta upp?" + System.Environment.NewLine + "Avsluta med '-1'");
+            var soughtLitres = 0;
             soughtLitres = Int32.Parse(Console.ReadLine());
             while (soughtLitres != -1)
             {
-                while (soughtLitres < 0 || soughtLitres > 5)
+                while (soughtLitres < 0)
                 {
-                    if (soughtLitres < 0)
-                    {
-                        Console.WriteLine("Du kan ej ange ett negativt tal.");
-                    }
-                    if (soughtLitres > 5)
-                    {
-                        Console.WriteLine("Du kan ej ange ett tal som är större än 5.");
-                    }
+                    Console.WriteLine("Du kan ej ange ett negativt tal.");
                     try
                     {
                         soughtLitres = Convert.ToInt32(Console.ReadLine());
@@ -48,10 +40,19 @@ namespace TwoBottles
 
                 // Pour from both directions
                 // Return smallest value
-                var fromSmallToBigBottleMoves = Pour(smallBottle, bigBottle, soughtLitres);
-                var fromBigToSmallBottleMoves = Pour(bigBottle, smallBottle, soughtLitres);
+                try
+                {
+                    var fromSmallToBigBottleMoves = Pour(smallBottle, bigBottle, soughtLitres);
+                    var fromBigToSmallBottleMoves = Pour(bigBottle, smallBottle, soughtLitres);
+                    var moves = new List<int> { fromSmallToBigBottleMoves, fromBigToSmallBottleMoves };
 
-                Console.WriteLine("Kortaste antal steg: " + ShortestMoves(new List<int>() { fromSmallToBigBottleMoves, fromBigToSmallBottleMoves }));
+                    Console.WriteLine("Kortast antal steg: " + moves.Min());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                
                 Console.WriteLine();
                 Console.WriteLine("Prova gärna igen:");
                 soughtLitres = Int32.Parse(Console.ReadLine());
@@ -60,6 +61,7 @@ namespace TwoBottles
 
         public static int Pour(int startBottle, int destinationBottle, int soughtLitres)
         {
+            var waterCombinations = new HashSet<Tuple<int, int>>();
             var moves = 0;
             var waterInBottle1 = 0;
             var waterInBottle2 = 0;
@@ -72,10 +74,10 @@ namespace TwoBottles
                 {
                     waterInBottle1 = startBottle;
                     moves++;
-                    Console.WriteLine("Steg " + moves + " (" + waterInBottle1 + "," + waterInBottle2 + ")");
+                    WriteStep(moves, waterInBottle1, waterInBottle2);
                 }
-                // Check if any bottle contain the right amount of water
-                if (waterInBottle1 == soughtLitres || waterInBottle2 == soughtLitres) { break; }
+                AddWaterCombination(waterInBottle1, waterInBottle2, waterCombinations);
+                if (DoIHaveTheAmountOfWater(waterInBottle1, waterInBottle2, soughtLitres)) { break; }
                 else
                 {
                     // If the sum of the water in both bottles contain more than
@@ -86,7 +88,7 @@ namespace TwoBottles
                         waterInBottle1 = waterInBottle1 - (destinationBottle - waterInBottle2);
                         waterInBottle2 = destinationBottle;
                         moves++;
-                        Console.WriteLine("Steg " + moves + " (" + waterInBottle1 + "," + waterInBottle2 + ")");
+                        WriteStep(moves, waterInBottle1, waterInBottle2);
                     }
                     // Else empty the water in the first bottle into the second bottle
                     else
@@ -94,10 +96,10 @@ namespace TwoBottles
                         waterInBottle2 = waterInBottle1 + waterInBottle2;
                         waterInBottle1 = 0;
                         moves++;
-                        Console.WriteLine("Steg " + moves + " (" + waterInBottle1 + "," + waterInBottle2 + ")");
+                        WriteStep(moves, waterInBottle1, waterInBottle2);
                     }
-                    // Check if any bottle contain the right amount of water
-                    if (waterInBottle1 == soughtLitres || waterInBottle2 == soughtLitres) { break; }
+                    AddWaterCombination(waterInBottle1, waterInBottle2, waterCombinations);
+                    if (DoIHaveTheAmountOfWater(waterInBottle1, waterInBottle2, soughtLitres)) { break; }
                     else
                     {
                         // Empty second bottle if first bottle is not empty
@@ -107,7 +109,7 @@ namespace TwoBottles
                         {
                             waterInBottle2 = 0;
                             moves++;
-                            Console.WriteLine("Steg " + moves + " (" + waterInBottle1 + "," + waterInBottle2 + ")");
+                            WriteStep(moves, waterInBottle1, waterInBottle2);
                         }
                     }
                 }
@@ -117,13 +119,51 @@ namespace TwoBottles
         }
 
         /// <summary>
-        /// Return minimum amount of moves from a list of moves
+        /// Add combination of water in bottles,
+        /// if we have seen the combination before we throw exception
         /// </summary>
-        /// <param name="movesList"></param>
-        /// <returns></returns>
-        public static int ShortestMoves(List<int> movesList)
+        /// <param name="waterInBottle1"></param>
+        /// <param name="waterInBottle2"></param>
+        /// <param name="waterCombinations"></param>
+        private static void AddWaterCombination(int waterInBottle1, int waterInBottle2, HashSet<Tuple<int, int>> waterCombinations)
         {
-            return movesList.Min();
+            if (waterCombinations.Contains(Tuple.Create(waterInBottle1, waterInBottle2)))
+            {
+                throw new Exception("Loop funnen, inga möjliga lösningar finns.");
+            }
+            else
+            {
+                waterCombinations.Add(Tuple.Create(waterInBottle1, waterInBottle2));
+            }
+        }
+
+        /// <summary>
+        /// Check if any water bottle contain
+        /// the desired amount of water
+        /// </summary>
+        /// <param name="waterInBottle1"></param>
+        /// <param name="waterInBottle2"></param>
+        /// <param name="soughtLitres"></param>
+        /// <returns></returns>
+        private static bool DoIHaveTheAmountOfWater(int waterInBottle1, int waterInBottle2, int soughtLitres)
+        {
+            if (waterInBottle1 == soughtLitres ||
+                waterInBottle2 == soughtLitres)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Write the step to console
+        /// </summary>
+        /// <param name="moves"></param>
+        /// <param name="waterInBottle1"></param>
+        /// <param name="waterInBottle2"></param>
+        private static void WriteStep(int moves, int waterInBottle1, int waterInBottle2)
+        {
+            Console.WriteLine("Steg " + moves + " (" + waterInBottle1 + "," + waterInBottle2 + ")");
         }
     }
 }
